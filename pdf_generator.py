@@ -8,12 +8,16 @@ from io import BytesIO
 def obter_cabecalho_loja(styles):
     title_style = ParagraphStyle('CabecalhoTitulo', parent=styles['Heading1'], fontName='Helvetica-Bold', fontSize=15, textColor=colors.HexColor('#1A365D'), alignment=1, spaceAfter=3)
     sub_style = ParagraphStyle('CabecalhoSub', parent=styles['Normal'], fontName='Helvetica', fontSize=9, textColor=colors.HexColor('#4A5568'), alignment=1, spaceAfter=2)
-    body_style = ParagraphStyle('Campos', parent=styles['Normal'], fontName='Helvetica', fontSize=10, spaceBefore=5, spaceAfter=5)
-    
     return [
         Paragraph("<b>MASTER TECH TELECOMUNICAÇÕES E INFORMÁTICA</b>", title_style),
         Paragraph("Avenida Aderup, N° 387, Bairro- Vila Canãa, Goiânia - GO, 74.415-010", sub_style),
         Paragraph("CNPJ: 11.030.539/0001-00 | Telefone: (62) 98647-3217", sub_style),
+        Spacer(1, 10)
+    ]
+
+def campos_extras_loja(styles):
+    body_style = ParagraphStyle('Campos', parent=styles['Normal'], fontName='Helvetica', fontSize=10, spaceBefore=5, spaceAfter=5)
+    return [
         Spacer(1, 10),
         Paragraph("<b>Serviço a ser executado:</b>", body_style),
         Paragraph("__________________________________________________________________", body_style),
@@ -21,10 +25,10 @@ def obter_cabecalho_loja(styles):
         Spacer(1, 5),
         Paragraph("<b>Valor para o reparo: R$ __________________</b>", body_style),
         Spacer(1, 5),
-        Paragraph("<b>Datas:</b> Orçamento: ___/___/___ | Aut.: ___/___/___ | Pronto: ___/___/___ | Entrega: ___/___/___", body_style),
+        Paragraph("<b>Datas:</b> Orçamento: ___/___/___ | Aut.: ___/___/___ | Pronto: ___/___/___ | Ent.: ___/___/___", body_style),
         Spacer(1, 15),
-        Paragraph("____________________________________________________", sub_style),
-        Paragraph("Assinatura do Cliente", sub_style)
+        Paragraph("____________________________________________________", body_style),
+        Paragraph("Assinatura do Cliente", body_style)
     ]
 
 def gerar_pdf_recibo(venda_id, produto, qtd, total, pagamento):
@@ -64,7 +68,10 @@ def gerar_pdf_os(os_id, cliente, telefone, tipo, modelo, serie, estado, defeito,
         elements.append(Paragraph(f"<b>Situação:</b> {status} | <b>Entrada:</b> {data_entrada}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
         elements.append(Paragraph(f"<b>Cliente:</b> {cliente} | <b>Aparelho:</b> {tipo} {modelo}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
         elements.append(Paragraph(f"<b>Valor Estimado:</b> R$ {valor:.2f}", ParagraphStyle('Bold', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=10)))
-        elements.append(Spacer(1, 10))
+        
+        if via_nome == "Via da Loja":
+            elements.extend(campos_extras_loja(styles))
+            
         return elements
 
     story.extend(criar_via("Via do Cliente"))
