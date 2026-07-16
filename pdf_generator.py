@@ -8,14 +8,13 @@ from io import BytesIO
 def obter_cabecalho_loja(styles):
     title_style = ParagraphStyle('CabecalhoTitulo', parent=styles['Heading1'], fontName='Helvetica-Bold', fontSize=15, textColor=colors.HexColor('#1A365D'), alignment=1, spaceAfter=3)
     sub_style = ParagraphStyle('CabecalhoSub', parent=styles['Normal'], fontName='Helvetica', fontSize=9, textColor=colors.HexColor('#4A5568'), alignment=1, spaceAfter=2)
-    # Adicionando o estilo para os novos campos
     body_style = ParagraphStyle('Campos', parent=styles['Normal'], fontName='Helvetica', fontSize=10, spaceBefore=5, spaceAfter=5)
     
     return [
         Paragraph("<b>MASTER TECH TELECOMUNICAÇÕES E INFORMÁTICA</b>", title_style),
         Paragraph("Avenida Aderup, N° 387, Bairro- Vila Canãa, Goiânia - GO, 74.415-010", sub_style),
         Paragraph("CNPJ: 11.030.539/0001-00 | Telefone: (62) 98647-3217", sub_style),
-        Spacer(1, 10),  # <--- Adicionada a vírgula aqui
+        Spacer(1, 10),
         Paragraph("<b>Serviço a ser executado:</b>", body_style),
         Paragraph("__________________________________________________________________", body_style),
         Paragraph("__________________________________________________________________", body_style),
@@ -26,7 +25,6 @@ def obter_cabecalho_loja(styles):
         Spacer(1, 15),
         Paragraph("____________________________________________________", sub_style),
         Paragraph("Assinatura do Cliente", sub_style)
-    ]
     ]
 
 def gerar_pdf_recibo(venda_id, produto, qtd, total, pagamento):
@@ -58,16 +56,14 @@ def gerar_pdf_os(os_id, cliente, telefone, tipo, modelo, serie, estado, defeito,
     doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
     story = []
     styles = getSampleStyleSheet()
-    normal_style = ParagraphStyle('OSNormal', parent=styles['Normal'], fontName='Helvetica', fontSize=10, textColor=colors.HexColor('#2D3748'), spaceAfter=6)
-    bold_style = ParagraphStyle('OSBold', parent=normal_style, fontName='Helvetica-Bold')
-
+    
     def criar_via(via_nome):
         elements = []
         elements.extend(obter_cabecalho_loja(styles))
         elements.append(Paragraph(f"<b>O.S. Nº {os_id} - {via_nome}</b>", ParagraphStyle('Via', parent=styles['Heading2'], alignment=1)))
-        elements.append(Paragraph(f"<b>Situação:</b> {status} | <b>Entrada:</b> {data_entrada}", normal_style))
-        elements.append(Paragraph(f"<b>Cliente:</b> {cliente} | <b>Aparelho:</b> {tipo} {modelo}", normal_style))
-        elements.append(Paragraph(f"<b>Valor Estimado:</b> R$ {valor:.2f}", bold_style))
+        elements.append(Paragraph(f"<b>Situação:</b> {status} | <b>Entrada:</b> {data_entrada}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
+        elements.append(Paragraph(f"<b>Cliente:</b> {cliente} | <b>Aparelho:</b> {tipo} {modelo}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
+        elements.append(Paragraph(f"<b>Valor Estimado:</b> R$ {valor:.2f}", ParagraphStyle('Bold', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=10)))
         elements.append(Spacer(1, 10))
         return elements
 
@@ -91,7 +87,6 @@ def gerar_pdf_recibo_entrega(os_id, cliente, telefone, tipo, modelo, serie, defe
     ]
     t = Table(dados, colWidths=[80, 200, 80, 100])
     story.append(t)
-    
     doc.build(story)
     buffer.seek(0)
     return buffer.getvalue()
