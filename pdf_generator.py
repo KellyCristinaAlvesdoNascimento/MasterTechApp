@@ -92,18 +92,21 @@ def gerar_pdf_recibo_entrega(os_id, cliente, telefone, tipo, modelo, serie, defe
     styles = getSampleStyleSheet()
     story.extend(obter_cabecalho_loja(styles))
     story.append(Paragraph(f"<b>RECIBO DE ENTREGA - O.S. {os_id}</b>", ParagraphStyle('Title', alignment=1, fontSize=14, spaceAfter=20)))
+    
     dados = [
         ["Cliente:", cliente, "Telefone:", telefone],
         ["Aparelho:", f"{tipo} {modelo}", "Série:", serie],
         ["Serviço Executado:", defeito_constatado, "Garantia:", garantia],
-        ["Peças Usadas:", pecas_usadas, "Forma Pagto:", forma_pagamento]
+        ["Peças Usadas:", pecas_usadas, "Forma Pagto:", forma_pagamento if forma_pagamento else "Não informado"]
     ]
     t = Table(dados, colWidths=[100, 200, 80, 100])
     t.setStyle(TableStyle([('GRID', (0,0), (-1,-1), 0.5, colors.grey), ('VALIGN', (0,0), (-1,-1), 'MIDDLE'), ('FONTNAME', (0,0), (0,-1), 'Helvetica-Bold')]))
     story.append(t)
+    
     story.append(Spacer(1, 20))
     story.append(Paragraph(f"<b>Valor Total:</b> R$ {valor:.2f}", styles['Normal']))
-    story.append(Paragraph(f"<i>Valor por extenso: __________________________________________________________________</i>", styles['Normal']))
+    story.append(Paragraph(f"<b>Valor por extenso:</b> R$ {valor:.2f} (Valor referente ao serviço realizado)", styles['Normal']))
+    
     story.append(Spacer(1, 40))
     assinaturas = [["____________________________", "____________________________"], ["Assinatura do Cliente", "Assinatura Atendente (Master Tech)"]]
     t_ass = Table(assinaturas, colWidths=[250, 250])
