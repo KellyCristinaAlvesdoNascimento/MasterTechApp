@@ -8,10 +8,14 @@ from io import BytesIO
 def obter_cabecalho_loja(styles):
     title_style = ParagraphStyle('CabecalhoTitulo', parent=styles['Heading1'], fontName='Helvetica-Bold', fontSize=15, textColor=colors.HexColor('#1A365D'), alignment=1, spaceAfter=3)
     sub_style = ParagraphStyle('CabecalhoSub', parent=styles['Normal'], fontName='Helvetica', fontSize=9, textColor=colors.HexColor('#4A5568'), alignment=1, spaceAfter=2)
+    # Novo estilo para o telefone, com tamanho maior (12)
+    phone_style = ParagraphStyle('TelefoneDestaque', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=12, textColor=colors.HexColor('#1A365D'), alignment=1, spaceAfter=2)
+    
     return [
         Paragraph("<b>MASTER TECH TELECOMUNICAÇÕES E INFORMÁTICA</b>", title_style),
         Paragraph("Avenida Aderup, N° 387, Bairro- Vila Canãa, Goiânia - GO, 74.415-010", sub_style),
-        Paragraph("CNPJ: 11.030.539/0001-00 | <b>Telefone/WhatsApp: (62) 98647-3217</b>", sub_style),
+        Paragraph("CNPJ: 11.030.539/0001-00", sub_style),
+        Paragraph("Telefone/WhatsApp: (62) 98647-3217", phone_style), # Aplicando o estilo maior aqui
         Spacer(1, 10)
     ]
 
