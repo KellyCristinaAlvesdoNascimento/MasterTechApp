@@ -11,7 +11,7 @@ def obter_cabecalho_loja(styles):
     return [
         Paragraph("<b>MASTER TECH TELECOMUNICAÇÕES E INFORMÁTICA</b>", title_style),
         Paragraph("Avenida Aderup, N° 387, Bairro- Vila Canãa, Goiânia - GO, 74.415-010", sub_style),
-        Paragraph("CNPJ: 11.030.539/0001-00 | Telefone: (62) 98647-3217", sub_style),
+        Paragraph("CNPJ: 11.030.539/0001-00 | <b>Telefone/WhatsApp: (62) 98647-3217</b>", sub_style),
         Spacer(1, 10)
     ]
 
@@ -38,10 +38,8 @@ def gerar_pdf_recibo(venda_id, produto, qtd, total, pagamento):
     styles = getSampleStyleSheet()
     normal_style = ParagraphStyle('NormalStyle', parent=styles['Normal'], fontName='Helvetica', fontSize=11, textColor=colors.HexColor('#2D3748'), spaceAfter=8)
     bold_style = ParagraphStyle('BoldStyle', parent=normal_style, fontName='Helvetica-Bold')
-
     story.extend(obter_cabecalho_loja(styles))
     story.append(Paragraph(f"<b>RECIBO DE VENDA Nº {venda_id}</b>", ParagraphStyle('ReciboNum', parent=styles['Heading2'], fontName='Helvetica-Bold', fontSize=13, textColor=colors.HexColor('#1A365D'), alignment=1, spaceAfter=10)))
-    
     dados = [
         [Paragraph("<b>Item / Produto</b>", bold_style), Paragraph(str(produto), normal_style)],
         [Paragraph("<b>Quantidade</b>", bold_style), Paragraph(str(qtd), normal_style)],
@@ -66,15 +64,18 @@ def gerar_pdf_os(os_id, cliente, telefone, tipo, modelo, serie, estado, defeito,
         elements.extend(obter_cabecalho_loja(styles))
         elements.append(Paragraph(f"<b>O.S. Nº {os_id} - {via_nome}</b>", ParagraphStyle('Via', parent=styles['Heading2'], alignment=1)))
         elements.append(Paragraph(f"<b>Situação:</b> {status} | <b>Entrada:</b> {data_entrada}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
-        elements.append(Paragraph(f"<b>Cliente:</b> {cliente} | <b>Aparelho:</b> {tipo} {modelo}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
+        elements.append(Paragraph(f"<b>Cliente:</b> {cliente} | <b>Tel:</b> {telefone}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
+        elements.append(Paragraph(f"<b>Aparelho:</b> {tipo} {modelo} | <b>Série:</b> {serie}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
+        elements.append(Paragraph(f"<b>Estado:</b> {estado}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
+        elements.append(Paragraph(f"<b>Defeito Reclamado:</b> {defeito}", ParagraphStyle('Normal', parent=styles['Normal'], fontSize=10)))
         elements.append(Paragraph(f"<b>Valor Estimado:</b> R$ {valor:.2f}", ParagraphStyle('Bold', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=10)))
-        
         if via_nome == "Via da Loja":
             elements.extend(campos_extras_loja(styles))
-            
         return elements
 
     story.extend(criar_via("Via do Cliente"))
+    story.append(Spacer(1, 50)) 
+    story.append(Paragraph("---------------------------------------------------------------------------------------------------------------------------", styles['Normal']))
     story.append(Spacer(1, 20))
     story.extend(criar_via("Via da Loja"))
     doc.build(story)
@@ -87,7 +88,6 @@ def gerar_pdf_recibo_entrega(os_id, cliente, telefone, tipo, modelo, serie, defe
     story = []
     styles = getSampleStyleSheet()
     story.extend(obter_cabecalho_loja(styles))
-    
     dados = [
         ["Cliente:", cliente, "Valor Pago:", f"R$ {valor:.2f}"],
         ["Serviço:", defeito_constatado, "Forma Pagto:", forma_pagamento]
