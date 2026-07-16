@@ -332,7 +332,7 @@ else:
                 num_serie = st.text_input("Número de Série / IMEI")
                 estado_fisico = st.text_area("Estado Físico do Aparelho")
                 defeito_relatado = st.text_area("Defeito Relatado pelo Cliente")
-                valor_est = st.number_input("Valor Estimado do Serviço (R$)", min_value=0.0, step=10.0)
+                valor_est = st.number_input("Valor Estimado do Serviço (R$)", min_value=0.0, step=10.0, format="%.2f")
                 salvar_os = st.form_submit_button("Salvar e Gerar O.S.")
                 
                 if salvar_os:
@@ -505,7 +505,8 @@ else:
                         pdf_recibo_garantia = bytes(pdf_generator.gerar_pdf_recibo_entrega(
                             os_id=dados_os[0], cliente=dados_os[1], telefone=dados_os[2], tipo=dados_os[3],
                             modelo=dados_os[4], serie=dados_os[5], defeito_constatado=def_constatado,
-                            pecas_usadas=pecas, valor=valor_fin, data_entrega=data_ent_doc, garantia=garantia_tempo
+                            pecas_usadas=pecas, valor=valor_fin, data_entrega=data_ent_doc, 
+                            garantia=garantia_tempo, forma_pagamento=forma_pagamento_os
                         ))
                         st.download_button("📥 Imprimir Recibo de Entrega e Garantia (PDF)", data=pdf_recibo_garantia, file_name=f"recibo_entrega_OS_{os_selecionada}.pdf", type="primary")
             else:
