@@ -8,11 +8,25 @@ from io import BytesIO
 def obter_cabecalho_loja(styles):
     title_style = ParagraphStyle('CabecalhoTitulo', parent=styles['Heading1'], fontName='Helvetica-Bold', fontSize=15, textColor=colors.HexColor('#1A365D'), alignment=1, spaceAfter=3)
     sub_style = ParagraphStyle('CabecalhoSub', parent=styles['Normal'], fontName='Helvetica', fontSize=9, textColor=colors.HexColor('#4A5568'), alignment=1, spaceAfter=2)
+    # Adicionando o estilo para os novos campos
+    body_style = ParagraphStyle('Campos', parent=styles['Normal'], fontName='Helvetica', fontSize=10, spaceBefore=5, spaceAfter=5)
+    
     return [
         Paragraph("<b>MASTER TECH TELECOMUNICAÇÕES E INFORMÁTICA</b>", title_style),
-        Paragraph("Avenida Principal, Centro - Goiânia - GO", sub_style),
-        Paragraph("Telefone / WhatsApp: (62) 98570-3663", sub_style),
-        Spacer(1, 10)
+        Paragraph("Avenida Aderup, N° 387, Bairro- Vila Canãa, Goiânia - GO, 74.415-010", sub_style),
+        Paragraph("CNPJ: 11.030.539/0001-00 | Telefone: (62) 98647-3217", sub_style),
+        Spacer(1, 10),  # <--- Adicionada a vírgula aqui
+        Paragraph("<b>Serviço a ser executado:</b>", body_style),
+        Paragraph("__________________________________________________________________", body_style),
+        Paragraph("__________________________________________________________________", body_style),
+        Spacer(1, 5),
+        Paragraph("<b>Valor para o reparo: R$ __________________</b>", body_style),
+        Spacer(1, 5),
+        Paragraph("<b>Datas:</b> Orçamento: ___/___/___ | Aut.: ___/___/___ | Pronto: ___/___/___ | Entrega: ___/___/___", body_style),
+        Spacer(1, 15),
+        Paragraph("____________________________________________________", sub_style),
+        Paragraph("Assinatura do Cliente", sub_style)
+    ]
     ]
 
 def gerar_pdf_recibo(venda_id, produto, qtd, total, pagamento):
